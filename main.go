@@ -51,6 +51,7 @@ func execute() error {
 
 	fmt.Println()
 	fmt.Printf("Average: %f\n", average(data))
+	fmt.Printf("Max: %f\n", max(data))
 	return nil
 }
 
@@ -68,7 +69,7 @@ func getCPUData() ([]float64, error) {
 			return nil, err
 		}
 		cpu, err := p.Percent(900 * time.Millisecond)
-	
+
 		if err != nil {
 			return nil, err
 		}
@@ -80,8 +81,18 @@ func getCPUData() ([]float64, error) {
 
 func average(nums []float64) float64 {
 	total := 0.0
-	for _, n :=range nums {
+	for _, n := range nums {
 		total += n
 	}
-	return total/float64(len(nums))
+	return total / float64(len(nums))
+}
+
+func max(nums []float64) float64 {
+	max := 0.0
+	for _, n := range nums {
+		if n > max {
+			max = n
+		}
+	}
+	return max
 }
