@@ -48,6 +48,9 @@ func execute() error {
 	for _, d := range data {
 		fmt.Println(d)
 	}
+
+	fmt.Println()
+	fmt.Printf("Average: %f\n", average(data))
 	return nil
 }
 
@@ -73,4 +76,12 @@ func getCPUData() ([]float64, error) {
 		total += .9
 	}
 	return cpuData, nil
+}
+
+func average(nums []float64) float64 {
+	total := 0.0
+	for _, n :=range nums {
+		total += n
+	}
+	return total/float64(len(nums))
 }
