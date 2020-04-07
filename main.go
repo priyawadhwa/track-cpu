@@ -59,22 +59,21 @@ func getCPUData() ([]float64, error) {
 	var cpuData []float64
 	total := 0
 
+	p, err := process.NewProcess(int32(pid))
+	if err != nil {
+		return nil, err
+	}
+
 	for {
 		if total > duration {
 			break
 		}
-
-		p, err := process.NewProcess(int32(pid))
-		if err != nil {
-			return nil, err
-		}
 		cpu, err := p.Percent(time.Duration(interval) * time.Millisecond)
-
 		if err != nil {
 			return nil, err
 		}
 		cpuData = append(cpuData, cpu)
-		total += interval
+		total += interval / 1000
 	}
 	return cpuData, nil
 }
