@@ -12,14 +12,14 @@ import (
 
 var (
 	pid      int
-	duration float64
-	interval float64
+	duration int
+	interval int
 )
 
 func init() {
 	flag.IntVar(&pid, "p", -1, "pid value")
-	flag.Float64Var(&duration, "d", 60.0, "duration to collect data in seconds")
-	flag.Float64Var(&interval, "i", .9, "interval at which to collect cpu data")
+	flag.IntVar(&duration, "d", 60, "duration to collect data (seconds)")
+	flag.IntVar(&interval, "i", 900, "interval at which to collect cpu data (ms)")
 }
 
 func main() {
@@ -57,7 +57,7 @@ func execute() error {
 
 func getCPUData() ([]float64, error) {
 	var cpuData []float64
-	total := 0.0
+	total := 0
 
 	for {
 		if total > duration {
@@ -68,13 +68,13 @@ func getCPUData() ([]float64, error) {
 		if err != nil {
 			return nil, err
 		}
-		cpu, err := p.Percent(900 * time.Millisecond)
+		cpu, err := p.Percent(time.Duration(interval) * time.Millisecond)
 
 		if err != nil {
 			return nil, err
 		}
 		cpuData = append(cpuData, cpu)
-		total += .9
+		total += interval
 	}
 	return cpuData, nil
 }
