@@ -45,9 +45,6 @@ func execute() error {
 	if err != nil {
 		return err
 	}
-	for _, d := range data {
-		fmt.Println(d)
-	}
 
 	fmt.Println()
 	fmt.Printf("Average: %f\n", average(data))
@@ -57,7 +54,7 @@ func execute() error {
 
 func getCPUData() ([]float64, error) {
 	var cpuData []float64
-	total := 0
+	total := 0.0
 
 	p, err := process.NewProcess(int32(pid))
 	if err != nil {
@@ -65,15 +62,16 @@ func getCPUData() ([]float64, error) {
 	}
 
 	for {
-		if total > duration {
+		if total > float64(duration) {
 			break
 		}
 		cpu, err := p.Percent(time.Duration(interval) * time.Millisecond)
 		if err != nil {
 			return nil, err
 		}
+		fmt.Println(cpu)
 		cpuData = append(cpuData, cpu)
-		total += interval / 1000
+		total = total + float64(interval)/1000.0
 	}
 	return cpuData, nil
 }
